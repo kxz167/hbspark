@@ -1,4 +1,4 @@
-import example
+# import example
 import happybase as hb
 
 #Instantiation of the HB session:
@@ -6,9 +6,10 @@ hb_session = None
 
 # Initialize the connection:
 def connect(hostname):
+    global hb_session
     hb_session = Session(hb.Connection(hostname))
 
-def tables(hostname):
+def tables():
     if(hb_session):
         return hb_session.connection().tables()
 
