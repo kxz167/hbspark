@@ -1,15 +1,15 @@
+# Initialize the hb_session
+conn = None
+
 def init(connection):
-    global hb_session
-    hb_session = Session(connection)
+    global conn
+    conn = connection
 
+# Get the connection from the session
 def connection():
-    global hb_session
-    return hb_session.connection()
+    global conn
+    return conn
 
-# Manages open connection to happybase in order to make various queries.
-class Session:
-    def __init__(self, conn):
-        self.conn = conn
-
-    def connection(self):
-        return self.conn
+# If connection is initialized
+def isInitialized():
+    return conn != None
