@@ -10,3 +10,5 @@ def connect(hostname):
     hb_session.init(hb.Connection(hostname))
     # hb_session = Session(hb.Connection(hostname))
 
+#Tables:
+from ._table import tables

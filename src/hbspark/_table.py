@@ -1,6 +1,6 @@
 from . import hb_session
 
-def tables(hostname):
+def tables():
     global hb_session
 
     if(hb_session):
