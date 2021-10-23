@@ -1,6 +1,6 @@
 # import example
 import happybase as hb
-import hb_session
+from . import hb_session
 
 #Instantiation of the HB session:
 # hb_session = None
