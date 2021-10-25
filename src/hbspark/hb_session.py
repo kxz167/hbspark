@@ -7,9 +7,14 @@ def init(connection):
 
 # Get the connection from the session
 def connection():
-    global conn
     return conn
 
 # If connection is initialized
 def isInitialized():
     return conn != None
+
+def query(function):
+    if(isInitialized):
+        return function()
+    
+    return None
