@@ -13,8 +13,9 @@ def connection():
 def isInitialized():
     return conn != None
 
-def query(function):
-    if(isInitialized):
-        return function()
+# Query the Happybase API by function name
+def query(hb_function, *args, **kwargs):
+    if(isInitialized()):
+        return getattr(conn, hb_function)(*args, **kwargs)
     
     return None

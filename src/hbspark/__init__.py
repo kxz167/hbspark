@@ -9,4 +9,4 @@ def connect(hostname):
     hb_session.init(hb.Connection(hostname))
 
 #Tables management:
-from ._table import tables
+from ._table import *
