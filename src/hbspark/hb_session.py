@@ -1,19 +1,64 @@
-# Initialize the hb_session
-conn = None
+# _hb_session.py
+# Internal session tracking and api interfaces
+# Kris Zhao
 
-def init(connection):
+###################
+#     Imports     #
+###################
+from pyspark.sql import Row
+
+############################
+#     Global Variables     #
+############################
+conn = None             # Store the HappyBase Connection Instance
+spark_session = None    # Store the spark session (for DF creation)
+
+###################
+#     Methods     #
+###################
+# Load the variables into the session
+def init(connection, spark):
     global conn
     conn = connection
 
-# Get the connection from the session
+    global spark_session
+    spark_session = spark
+
+# Check if the connection and session have been initialized
+# Returns boolean
+def isInitialized():
+    return conn != None and spark_session is not None
+
+# Get the HB connection from the session
 def connection():
     return conn
 
-# If connection is initialized
-def isInitialized():
-    return conn != None
+# Get the spark_session from the session
+def spark():
+    return spark_session
 
-# Query the Happybase API by function name
+# Create spark dataframe from dicts / lists
+# Returns spark dataframe
+def create_data_frame(val):
+    return spark_session.createDataFrame(val)
+
+# Create a new spark Row
+# Returns a spark row
+def create_row(*args, **kwargs):
+    return Row(*args, **kwargs)
+
+# Creates a HBase table through HappyBase
+# Returns nothing
+def _create_table(name, families):
+    return conn.create_table(name, families)
+
+# Delete a HBase table through happybase Table
+# Should return nothing
+def _delete_table(name, disabled):
+    return conn.delete_table(name, disabled)
+
+# Query the Happybase API by function name, and args / kwargs
+# Returns whatever is returned by the function.
 def query(hb_function, *args, **kwargs):
     if(isInitialized()):
         return getattr(conn, hb_function)(*args, **kwargs)
