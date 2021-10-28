@@ -1,5 +1,6 @@
 import hbspark as hs
 import sys
+import json
 
 from pyspark.sql import SparkSession
 from pyspark.sql import Row
@@ -9,7 +10,7 @@ from pyspark.sql import Row
 spark = SparkSession.builder.appName("kxz167").master("local[1]").getOrCreate()
 
 hs.connect(sys.argv[1], spark)
-print(hs.tables())
+# print(hs.tables())
 
 # selected_table = hs.table('kxz167_test_table');
 # print(hs.table('kxz167_test_table'))
@@ -47,18 +48,18 @@ print(hs.tables())
 new_table_name = 'kxz167-tt10'
 if(hs.has_table(new_table_name)):
     # If a table exists:
-    print("Deleted existing table")
+    print("Deleting existing table")
     hs.delete_table(new_table_name, True)
 
-print("Create new table")
-
+print("Creating new table: ",new_table_name)
 new_table_families = {
     "cf1":dict(),
     "cf2":dict(),
     "cf3":dict()
 }
-new_table = hs.create_table('kxz167-tt10', new_table_families)
+new_table = hs.create_table(new_table_name, new_table_families)
 
+print("Creating new row:")
 test_dict = {
     "cf1:column1" : "value1",
     "cf1:column2" : "value2",
@@ -66,9 +67,34 @@ test_dict = {
     "cf2:column2" : "value4",
     "cf2:column3" : "value5"
 }
-
 print(test_dict)
-hs_row = hs.hbase_row(test_dict)
+hs_row = hs.hbase_row(test_dict)    #The spark ROW:
 print(hs_row)
-new_table.put("string_rowkey1",hs_row)
+
+#Load the data into the table:
+new_rowkey = "string_rowkey1"
+new_table.put(new_rowkey,hs_row)
+new_table.scan().show()
+
+# Batch insertion of data:
+print("Loading batch data")
+batch_obj = new_table.batch()
+
+# Add into batch
+for x in range(2,10):
+    loop_rowkey = "string_rowkey{}".format(x)
+    loop_data = {
+        'cf1:column1': "value1_rk" + str(x),
+        'cf1:column2': "value2_rk" + str(x),
+        'cf2:column1': "value3_rk" + str(x),
+        'cf2:column2': "value4_rk" + str(x),
+        'cf2:column3': "value5_rk" + str(x)
+    }
+    # loop_data = json.loads('{"cf1:column1": "value1_rk{}", "cf1:column2": "value2_rk{}", "cf2:column1": "value3_rk{}", "cf2:column2": "value4_rk{}", "cf2:column3": "value5_rk{}"}'.format(x,x,x,x,x))
+    print(loop_rowkey, " : ",loop_data)
+    print(hs.hbase_row(loop_data))
+    batch_obj.put(loop_rowkey, hs.hbase_row(loop_data))
+
+# Perform the operation.
+batch_obj.send()
 new_table.scan().show()

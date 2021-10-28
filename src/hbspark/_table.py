@@ -89,15 +89,14 @@ class Table:
     def delete(self, rowkey, *args, **kwargs):
         return self.table_ref.delete(rowkey, *args, **kwargs)
 
-    #TODO Convert to pyspark
     #For bulk puts / deletes of rows.
     def batch(self, *args, **kwargs):
-        return self.table_ref.batch(*args, **kwargs)
+        return Batch(self.table_ref.batch(*args, **kwargs))
 
-    # *COUNTERS*
+    # *COUNTERS?*
 
     # Creates a new dataframe from the specified scan
-    # Appends rowkey
+    # Appends rowkey to the front of the dictionary
     def scan(self, *args, **kwargs):
         data_generator = self.table_ref.scan(*args, **kwargs)
         # for index, row in data_generator:
@@ -105,3 +104,20 @@ class Table:
         return hb_session.create_data_frame([
             dict(bindict_to_strdict(column_data),rowkey=row_index.decode("utf-8")) for row_index, column_data in self.table_ref.scan(*args, **kwargs)
         ])
+
+class Batch:
+    def __init__(self, hb_batch):
+        self.hb_batch = hb_batch
+
+    # Submit the batch process
+    def send(self):
+        self.hb_batch.send()
+
+    # Put the Pyspark row into the database
+    def put(self, row, data, wal=None):
+        print(data)
+        self.hb_batch.put(row, data.asDict(True), wal)
+
+    def delete(self, row, column=None, wal=None):
+        self.hb_batch.put(row, column, wal)
+
