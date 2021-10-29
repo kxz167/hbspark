@@ -70,7 +70,7 @@ test_dict = {
 print(test_dict)
 hs_row = hs.hbase_row(test_dict)    #The spark ROW:
 print(hs_row)
-
+# Row(test_dict)
 #Load the data into the table:
 new_rowkey = "string_rowkey1"
 new_table.put(new_rowkey,hs_row)
