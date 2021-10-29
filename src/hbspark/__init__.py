@@ -10,7 +10,7 @@ import happybase as hb
 from . import hb_session
 
 # Tables management functionality:
-from ._table import *
+from .table import *
 
 # General utilitarian functions
 from ._utils import *
