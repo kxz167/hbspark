@@ -44,7 +44,6 @@ exclude_patterns = [
     
 ]
 
-
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -62,7 +61,6 @@ html_theme_options = {
 html_static_path = ['_static']
 
 # -- Options for intersphinx  -------------------------------------------------
-pydoctor_url_path = '/en/{rtd_version}/api'
 
 intersphinx_mapping = {
     # 'hbspark': (f'https://hbspark.readthedocs.io{pydoctor_url_path}', None)
@@ -70,20 +68,14 @@ intersphinx_mapping = {
 
 extensions.append("pydoctor.sphinx_ext.build_apidocs")
 
-import os
 import pathlib
-print(os.getcwd())
-_pydoctor_root = pathlib.Path(__file__).parent.parent.parent
-print(_pydoctor_root)
+_hbspark_root = pathlib.Path(__file__).parent.parent.parent     #Set the spark root.
 
 pydoctor_args = {
     '--html-output={outdir}/api/',
-    # '../src/hbspark'              #For local development
-    # '../../../../hbspark/src/hbspark'       #For readthedocs
-    f'--project-base-dir={_pydoctor_root}',
-    '--project-name=hbspark',
-    f'{_pydoctor_root}/src/hbspark',
+    f'--project-base-dir={_hbspark_root}',
+    f'--project-name={project}',
+    f'{_hbspark_root}/src/hbspark',
 }
 
-
-
+pydoctor_url_path = '/en/{rtd_version}/api'
