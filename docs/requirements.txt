@@ -1,0 +1,4 @@
+# Define exact versions are good:
+sphinx
+sphinx_rtd_theme
+pydoctor

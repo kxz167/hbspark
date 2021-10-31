@@ -13,6 +13,8 @@ HbSpark is meant to be a pipelining tool that allows for an efficient transfer o
 Contents:
 ---------
 
+The quickstart contains useful information about getting up and running with HbSpark:
+
 .. toctree::
    :maxdepth: 2
 
@@ -21,8 +23,11 @@ Contents:
 
 API
 ---
+
+It is highly recommended to utilize the API documentation while building your own projects with HbSpark.
+
 .. toctree::
-   
+
    api_documentation
 
    
