@@ -7,14 +7,14 @@
   <head>
     
     <title>hbspark.table</title>
-    <meta name="generator" content="pydoctor 21.9.1"> 
+    <meta name="generator" content="pydoctor 21.9.2"> 
         
     </meta>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
-    <meta content="width=device-width, initial-scale=0.75" name="viewport" />
-    <link href="bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="apidocs.css" rel="stylesheet" type="text/css" />
-    <link href="extra.css" rel="stylesheet" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.75" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
 </head>
 
   <body>
@@ -70,7 +70,7 @@
       </div>
 
       <div class="moduleDocstring">
-        <div><p class="undocumented">Undocumented</p></div>
+        <div>Holds all tabling functionality for hbspark, including creating, deletion, querying, and modifications.</div>
       </div>
 
       <div id="splitTables">
@@ -80,48 +80,43 @@
   <tr class="class">
     
     <td>Class</td>
-    <td><code><a href="hbspark.table.Batch.html">Batch</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
-  </tr><tr class="class">
-    
-    <td>Class</td>
     <td><code><a href="hbspark.table.Table.html">Table</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td>Represents the instance of the HBase table.</td>
   </tr><tr class="function">
     
     <td>Function</td>
     <td><code><a href="#create_table">create_table</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td>Create a new table inside HBase.</td>
   </tr><tr class="function">
     
     <td>Function</td>
     <td><code><a href="#delete_table">delete_table</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td>Deletes an existing table from the HBase connection.</td>
   </tr><tr class="function">
     
     <td>Function</td>
     <td><code><a href="#families">families</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td>Get all of the families for a specific HBase table.</td>
   </tr><tr class="function">
     
     <td>Function</td>
     <td><code><a href="#get_or_create_table">get_or_create_table</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td>Gets the table provided by <tt class="rst-docutils literal">table_name</tt> or creates a new one with the provided column families from <tt class="rst-docutils literal">families</tt>.</td>
   </tr><tr class="function">
     
     <td>Function</td>
     <td><code><a href="#has_table">has_table</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td>Determine if the HBase connection contains the specified tablename.</td>
   </tr><tr class="function">
     
     <td>Function</td>
     <td><code><a href="#table">table</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td>Get an instance of a specific table that can have queries performed on it.</td>
   </tr><tr class="function">
     
     <td>Function</td>
     <td><code><a href="#tables">tables</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td>Get all of the tables at the initialized HBase connection.</td>
   </tr>
 </table>
         
@@ -142,13 +137,13 @@
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">create_table</span>(name, families={}):
+    <span class="py-keyword">def</span> <span class="py-defname">create_table</span>(name, families):
     
   </div>
   <div class="docstring functionBody">
     
     
-    <div><p class="undocumented">Undocumented</p></div>
+    <div>Create a new table inside HBase.<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">name:</span>string</td><td class="fieldArgDesc">The new table's name.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">families:</span><tt class="rst-docutils literal">dict : (string <span class="pre">-&gt;</span> dict: (attr <span class="pre">-&gt;</span> val))</tt></td><td class="fieldArgDesc"><tt class="rst-docutils literal">dict</tt> of column family names to the column <a class="rst-reference external" href="http://blank" target="_top">settings</a>.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="hbspark.table.Table.html">hbspark.table.Table</a></code></td><td class="fieldArgDesc">An instance of the newly created table</td></tr></table></div>
   </div>
 </div><div class="basefunction">
   
@@ -167,7 +162,7 @@
   <div class="docstring functionBody">
     
     
-    <div><p class="undocumented">Undocumented</p></div>
+    <div>Deletes an existing table from the HBase connection.<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">name:</span>string</td><td class="fieldArgDesc">The name of the table that is to be deleted.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">disabled:</span>bool</td><td class="fieldArgDesc">Whether or not tables should only be deleted if they are disabled in hbase (False), or if any table regardless of status can be deleted (True) .</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer">None</td><td class="fieldArgDesc">No return</td></tr></table></div>
   </div>
 </div><div class="basefunction">
   
@@ -186,7 +181,7 @@
   <div class="docstring functionBody">
     
     
-    <div><p class="undocumented">Undocumented</p></div>
+    <div>Get all of the families for a specific HBase table.<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">table_name:</span>string</td><td class="fieldArgDesc">The name of the HBase table.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><tt class="rst-docutils literal">dict : (string <span class="pre">-&gt;</span> dict: (attr <span class="pre">-&gt;</span> val))</tt></td><td class="fieldArgDesc"><tt class="rst-docutils literal">dict</tt> of column family names to the column family's HBase attributes.</td></tr></table></div>
   </div>
 </div><div class="basefunction">
   
@@ -205,7 +200,7 @@
   <div class="docstring functionBody">
     
     
-    <div><p class="undocumented">Undocumented</p></div>
+    <div>Gets the table provided by <tt class="rst-docutils literal">table_name</tt> or creates a new one with the provided column families from <tt class="rst-docutils literal">families</tt>.<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">table_name:</span>string</td><td class="fieldArgDesc">The name of the HBase table.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">families:</span><tt class="rst-docutils literal">dict : (string <span class="pre">-&gt;</span> dict: (attr <span class="pre">-&gt;</span> val))</tt></td><td class="fieldArgDesc"><tt class="rst-docutils literal">dict</tt> of column family names to the column <a class="rst-reference external" href="http://blank" target="_top">settings</a>.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="hbspark.table.Table.html">hbspark.table.Table</a></code></td><td class="fieldArgDesc">An instance of the provided <tt class="rst-docutils literal">table_name</tt> either newly created or not.</td></tr></table></div>
   </div>
 </div><div class="basefunction">
   
@@ -224,7 +219,7 @@
   <div class="docstring functionBody">
     
     
-    <div><p class="undocumented">Undocumented</p></div>
+    <div>Determine if the HBase connection contains the specified tablename.<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">table_name:</span>string</td><td class="fieldArgDesc">The name for the table to be checked.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer">bool</td><td class="fieldArgDesc">True if the connection contains <tt class="rst-docutils literal">table_name</tt>, false otherwise.</td></tr></table></div>
   </div>
 </div><div class="basefunction">
   
@@ -243,7 +238,7 @@
   <div class="docstring functionBody">
     
     
-    <div><p class="undocumented">Undocumented</p></div>
+    <div>Get an instance of a specific table that can have queries performed on it.<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">table_name:</span>string</td><td class="fieldArgDesc">The name for the table to be returned.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="hbspark.table.Table.html">hbspark.table.Table</a></code></td><td class="fieldArgDesc">The table instance, permitting various querying and modification operations.</td></tr></table></div>
   </div>
 </div><div class="basefunction">
   
@@ -262,7 +257,7 @@
   <div class="docstring functionBody">
     
     
-    <div><p class="undocumented">Undocumented</p></div>
+    <div>Get all of the tables at the initialized HBase connection.<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><tt class="rst-docutils literal">list</tt> of <tt class="rst-docutils literal">string</tt></td><td class="fieldArgDesc">A list of the string names of the tables stored at the HBase connection <code><a href="hbspark._hb_session.html#conn">hbspark._hb_session.conn</a></code></td></tr></table></div>
   </div>
 </div>
 
@@ -274,7 +269,7 @@
   <div class="container">
     <a href="index.html">API Documentation</a> for hbspark,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    21.9.1 at 2021-10-29 10:19:40.
+    21.9.2 at 2021-10-30 21:34:34.
   </div>
 </footer>
 
