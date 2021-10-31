@@ -65,17 +65,25 @@ html_static_path = ['_static']
 pydoctor_url_path = '/en/{rtd_version}/api'
 
 intersphinx_mapping = {
-    'hbspark': ('https://hbspark.readthedocs.io{pydoctor_url_path}', '../../apidocs/objects.inv')
+    # 'hbspark': (f'https://hbspark.readthedocs.io{pydoctor_url_path}', None)
 }
 
 extensions.append("pydoctor.sphinx_ext.build_apidocs")
 
+import os
+import pathlib
+print(os.getcwd())
+_pydoctor_root = pathlib.Path(__file__).parent.parent.parent
+print(_pydoctor_root)
+
 pydoctor_args = {
-    '--html-output={outdir}/api',
+    '--html-output={outdir}/api/',
     # '../src/hbspark'              #For local development
-    '../../../../hbspark/src/hbspark'       #For readthedocs
+    # '../../../../hbspark/src/hbspark'       #For readthedocs
+    f'--project-base-dir={_pydoctor_root}',
+    '--project-name=hbspark',
+    f'{_pydoctor_root}/src/hbspark',
 }
 
-import os
-print(os.getcwd())
+
 
