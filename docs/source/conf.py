@@ -73,6 +73,6 @@ extensions.append("pydoctor.sphinx_ext.build_apidocs")
 pydoctor_args = {
     '--html-output={outdir}/api',
     # '../src/hbspark'              #For local development
-    '../../../../src/hbspark'       #For readthedocs
+    '../../../../hbspark/src/hbspark'       #For readthedocs
 }
 
