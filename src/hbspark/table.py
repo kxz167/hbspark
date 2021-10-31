@@ -455,7 +455,7 @@ class Table:
                 column = ["cf_x:col_x", ...]
 
             @type rowkey: string
-            @param row: The rowkey targeting the row to be deleted.
+            @param rowkey: The rowkey targeting the row to be deleted.
 
             @type column: list
             @param column: The list of column names to be deleted.

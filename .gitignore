@@ -4,3 +4,5 @@ venv
 *.pyc
 */__pycache__
 */tester.py
+
+docs/build
