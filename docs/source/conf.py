@@ -76,3 +76,6 @@ pydoctor_args = {
     '../../../../hbspark/src/hbspark'       #For readthedocs
 }
 
+import os
+print(os.getcwd())
+
