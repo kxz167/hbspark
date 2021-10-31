@@ -175,12 +175,12 @@ class Table:
         return bindict_to_strdict(self._table_ref.regions())
 
     # Specific data retrieval
-    def row(self, row, columns=None, timestamp=None, include_timestamp=False):
+    def row(self, rowkey, columns=None, timestamp=None, include_timestamp=False):
         """
         Get a row from the HBase.
 
-        @type row: string
-        @param row: The rowkey for the provided row.
+        @type rowkey: string
+        @param rowkey: The rowkey for the provided row.
 
         @type columns: C{list} of C{string}
         @param columns: The column names which should be retrieved from the row.
@@ -194,18 +194,18 @@ class Table:
         @rtype: U{pyspark.sql.Row<https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.Row.html>}
         @return: The row as a spark manageable data structure.
         """
-        return hb_session.create_row(**bindict_to_strdict(self._table_ref.row(str(row), columns=columns, timestamp=timestamp, include_timestamp=include_timestamp)))
+        return hb_session.create_row(**bindict_to_strdict(self._table_ref.row(str(rowkey), columns=columns, timestamp=timestamp, include_timestamp=include_timestamp)))
 
     #TODO Convert to pyspark
-    def cells(self, row, column, versions=None, timestamp=None, include_timestamp=False):
+    def cell(self, rowkey, column, versions=None, timestamp=None, include_timestamp=False):
         """
         Retrieve the cell value (and it's hisotry) from the HBase table.
 
-        @type row: C{list} of C{string}
-        @param row: A list of all the rowkeys to be retreived.
+        @type rowkey: string
+        @param rowkey: The rowkey for the target cell.
 
-        @type column: C{list} of C{string}
-        @param column: The column names which should be retrieved from the row.
+        @type column: string
+        @param column: The column name for the target cell.
         
         @type versions: int
         @param versions: The maximum numbers of cell versions to be retrieved.
@@ -220,10 +220,10 @@ class Table:
         @return: List of each retrieved row from the table.
         """
 
-        return self._table_ref.cells(row, column, versions=versions, timestamp=timestamp, include_timestamp=include_timestamp)
+        return self._table_ref.cells(rowkey, column, versions=versions, timestamp=timestamp, include_timestamp=include_timestamp)
 
     # Table modification:
-    def put(self, row, data, timestamp=None, wal=True):
+    def put(self, rowkey, data, timestamp=None, wal=True):
         """
         Insert a new row into the HBase table.
 
@@ -234,8 +234,8 @@ class Table:
                 ...
             }
         
-        @type row: string
-        @param row: The rowkey for the new inserted row.
+        @type rowkey: string
+        @param rowkey: The rowkey for the new inserted row.
         
         @type data: dict
         @param data: The dictionary mapping C{cf:col} to values to be stored.
@@ -253,7 +253,7 @@ class Table:
 
         dataDict = data.asDict(True) #Must be structured as "columnfamily:column"
         # print(dataDict)
-        return self._table_ref.put(row, dataDict, timestamp=None, wal=True)
+        return self._table_ref.put(rowkey, dataDict, timestamp=None, wal=True)
 
     # Deletes the row at the given rowkey, can specify columns.
     def delete(self, rowkey, columns=None, timestamp=None, wal=True):
@@ -303,7 +303,7 @@ class Table:
         @return: The batch processor for the current table. 
         """
 
-        return Batch(self._table_ref.batch(timestamp=timestamp, batch_size=batch_size, transaction=transaction, wal=wal))
+        return self.Batch(self._table_ref.batch(timestamp=timestamp, batch_size=batch_size, transaction=transaction, wal=wal))
 
     # *COUNTERS?*
 
@@ -367,10 +367,23 @@ class Table:
         @rtype: U{pyspark.sql.DataFrame<https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.html#pyspark.sql.DataFrame>}
         @return: A dataframe that consists of all the rows in the HBase table.
         """
-        data_generator = self._table_ref.scan(*args, **kwargs)
+        data_generator = self._table_ref.scan(
+            row_start=row_start, 
+            row_stop=row_stop, 
+            row_prefix=row_prefix, 
+            columns=columns, 
+            filter=filter, 
+            timestamp=timestamp, 
+            include_timestamp=include_timestamp, 
+            batch_size=batch_size, 
+            scan_batching=scan_batching, 
+            limit=limit, 
+            sorted_columns=sorted_columns, 
+            reverse=reverse
+        )
 
         return hb_session.create_data_frame([
-            dict(bindict_to_strdict(column_data),rowkey=row_index.decode("utf-8")) for row_index, column_data in self._table_ref.scan(*args, **kwargs)
+            dict(bindict_to_strdict(column_data),rowkey=row_index.decode("utf-8")) for row_index, column_data in data_generator
         ])
 
     class Batch:
@@ -407,7 +420,7 @@ class Table:
             self._hb_batch.send()
 
         # Put the Pyspark row into the database
-        def put(self, row, data, wal=None):
+        def put(self, rowkey, data, wal=None):
             """
             Load a new put operation into the batch.
             
@@ -418,8 +431,8 @@ class Table:
                     ...
                 }
             
-            @type row: string
-            @param row: The rowkey for the new inserted row.
+            @type rowkey: string
+            @param rowkey: The rowkey for the new inserted row.
             
             @type data: dict
             @param data: The dictionary mapping C{cf:col} to values to be stored.
@@ -431,9 +444,9 @@ class Table:
             @return: Method does not return.
 
             """
-            self._hb_batch.put(row, data.asDict(True), wal=wal)
+            self._hb_batch.put(rowkey, data.asDict(True), wal=wal)
 
-        def delete(self, row, column=None, wal=None):
+        def delete(self, rowkey, column=None, wal=None):
             """
             Load a new delete operation into the batch.
 
@@ -441,7 +454,7 @@ class Table:
 
                 column = ["cf_x:col_x", ...]
 
-            @type row: string
+            @type rowkey: string
             @param row: The rowkey targeting the row to be deleted.
 
             @type column: list
@@ -453,5 +466,5 @@ class Table:
             @rtype: None
             @return: Method does not return.
             """
-            self._hb_batch.put(row, column=column, wal=wal)
+            self._hb_batch.put(rowkey, column=column, wal=wal)
 
