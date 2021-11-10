@@ -39,8 +39,8 @@ def spark():
 
 # Create spark dataframe from dicts / lists
 # Returns spark dataframe
-def create_data_frame(val):
-    return spark_session.createDataFrame(val)
+def create_data_frame(val, schema=None, samplingRatio=None, verifySchema=True):
+    return spark_session.createDataFrame(val, schema, samplingRatio, verifySchema)
 
 # Create a new spark Row
 # Returns a spark row

@@ -311,6 +311,7 @@ class Table:
     # Appends rowkey to the front of the dictionary
     def scan(
         self,
+        schema=None,
         row_start=None, 
         row_stop=None, 
         row_prefix=None, 
@@ -326,6 +327,9 @@ class Table:
     ):
         """
         Retrieve all of the rows inside the HBase table.
+
+        @type schema: StructType
+        @param schema: A list of StructField with ("cf:name", Type(), True)
 
         @type row_start: string
         @param row_start: Beginning rowkey of the scan (inclusive).
@@ -384,7 +388,7 @@ class Table:
 
         return hb_session.create_data_frame([
             dict(bindict_to_strdict(column_data),rowkey=row_index.decode("utf-8")) for row_index, column_data in data_generator
-        ])
+        ], schema)
 
     class Batch:
         """
